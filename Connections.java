@@ -1,61 +1,53 @@
+
 import java.util.*;
+
 public class Connections {
-    private static final String[] WORDS = {
-        "Apple", "Banana", "Orange", "Grape",
-        "Car", "Bicycle", "Train", "Plane",
-        "Dog", "Cat", "Bird", "Fish",
-        "Red", "Green", "Blue", "Yellow"
-    };
+
     public static void main(String[] args) {
         System.out.println("Hello! - Welcome to Neemah's Connections Game");
         Scanner scanner = new Scanner(System.in);
-        List<String> wordList = new ArrayList<>(Arrays.asList(WORDS));
-        List<List<String>> groups = new ArrayList<>();
 
-        System.out.println("You have 16 words. Group them into 4 groups of 4 based on their unknown connections that you must figure out.");
+        //creating Arraylist of display words
+        ArrayList<String> wordList = new ArrayList<>(Arrays.asList("Apple", "Banana", "Orange", "Grape",
+                "Car", "Bicycle", "Train", "Plane",
+                "Dog", "Cat", "Bird", "Fish",
+                "Red", "Green", "Blue", "Yellow"));
 
-        // Shuffle the words
+        //creating the array's of the 4 groups
+        String[] group1 = {"Apple", "Banana", "Orange", "Grape"};
+        String[] group2 = {"Car", "Bicycle", "Train", "Plane"};
+        String[] group3 = {"Dog", "Cat", "Bird", "Fish"};
+        String[] group4 = {"Red", "Green", "Blue", "Yellow"};
+
+        System.out.println("You have 16 words. Group them into 4 groups of 4 based on their unknown connections that you must figure out. Be smart though, You only have 4 guesses");
+
+        //Shuffle the display words
         Collections.shuffle(wordList);
+
+        System.out.println(" ");
 
         // Display the shuffled words
         System.out.println("Words:");
-        for (int i = 0; i < WORDS.length; i++) {
+        for (int i = 0; i < wordList.size(); i++) {
             System.out.print(wordList.get(i) + "\t");
-            if ((i + 1) % 4 == 0)
+            if ((i + 1) % 4 == 0) {
                 System.out.println();
-        }
-    int correctGuesses = 0;
-        while (groups.size() < 4) {
-            System.out.print("\nEnter your guess for group " + (groups.size() + 1) + ": ");
-            String guessInput = scanner.nextLine();
-            String[] guessWords = guessInput.split(" ");
-
-            if (guessWords.length != 4) {
-                System.out.println("Invalid input. Please enter exactly 4 words.");
-                continue;
-            }
-
-            List<String> guess = Arrays.asList(guessWords);
-            if (isCorrectGuess(guess, groups, wordList)) {
-                groups.add(guess);
-                correctGuesses++;
-                System.out.println("Correct guess! Group " + groups.size() + " eliminated.");
-            } else {
-                System.out.println("Incorrect guess. Try again.");
             }
         }
+        
+        System.out.println(" ");
+        int guessNumber = 1;
+        do { 
+            System.out.println("Guess " + guessNumber + ":");
+            String guess = scanner.nextLine();
+            String[] guessArray = guess.split(" ");
 
-        System.out.println("\nCongratulations! You've successfully guessed all groups.");
-        scanner.close();
-    }
+            if (guessArray == group1 || guessArray == group2 || guessArray == group3 || guessArray == group4){
+                System.out.println("Congrats you got that group right");
+            } System.out.println("Try again"); 
 
-    // Method to check if the user's guess is correct
-    private static boolean isCorrectGuess(List<String> guess, List<List<String>> groups, List<String> wordList) {
-        for (List<String> group : groups) {
-            if (group.containsAll(guess)) {
-                return false;
-            }
-        }
-        return wordList.containsAll(guess);
+            guessNumber++;
+        } while (wordList.size() > 0 || guessNumber < 5);
+        
     }
 }
