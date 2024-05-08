@@ -3,47 +3,45 @@ import java.util.*;
 
 class GameHandler {
 
-    Category[] categories;
-    Category[] table = new Category[4];
+    ArrayList<Category> categories;
+    ArrayList<Category> table;
     int attempts;
 
     public GameHandler() {
-        this.categories = new Category[20];
+        this.categories = new ArrayList<>();
+        this.table = new ArrayList<>();
         this.attempts = 4;
     }
 
     public void fillCategories() {
-        this.categories[0] = new Category("NBA", new String[]{"lebron", "curry", "kobe", "shaq"});
-        this.categories[1] = new Category("animals", new String[]{"dog", "cat", "bird", "fish"});
-        this.categories[2] = new Category("fruits", new String[]{"apple", "banana", "orange", "grape"});
-        this.categories[3] = new Category("colors", new String[]{"red", "blue", "green", "yellow"});
-        this.categories[4] = new Category("countries", new String[]{"usa", "canada", "mexico", "brazil"});
-        this.categories[5] = new Category("cities", new String[]{"newyork", "losangeles", "chicago", "miami"});
-        this.categories[6] = new Category("planets", new String[]{"earth", "mars", "venus", "jupiter"});
-        this.categories[7] = new Category("languages", new String[]{"english", "spanish", "french", "chinese"});
-        this.categories[8] = new Category("shapes", new String[]{"circle", "square", "triangle", "rectangle"});
-        this.categories[9] = new Category("school subjects", new String[]{"math", "science", "history", "english"});
-        this.categories[10] = new Category("musical instruments", new String[]{"guitar", "piano", "drums", "violin"});
-        this.categories[11] = new Category("desserts", new String[]{"cake", "ice cream", "pie", "cookies"});
-        this.categories[12] = new Category("vegetables", new String[]{"carrot", "broccoli", "lettuce", "tomato"});
-        this.categories[13] = new Category("clothing", new String[]{"shirt", "pants", "shoes", "hat"});
-        this.categories[14] = new Category("weather", new String[]{"sunny", "rainy", "cloudy", "snowy"});
-        this.categories[15] = new Category("months", new String[]{"january", "february", "march", "april"});
-        this.categories[16] = new Category("days of the week", new String[]{"monday", "tuesday", "wednesday", "thursday"});
-        this.categories[17] = new Category("seasons", new String[]{"spring", "summer", "fall", "winter"});
-        this.categories[18] = new Category("holidays", new String[]{"christmas", "halloween", "thanksgiving", "easter"});
-        this.categories[19] = new Category("sports", new String[]{"football", "basketball", "soccer", "baseball"});
+        this.categories.add(new Category("NBA", new String[]{"lebron", "curry", "kobe", "shaq"}));
+        this.categories.add(new Category("animals", new String[]{"dog", "cat", "bird", "fish"}));
+        this.categories.add(new Category("fruits", new String[]{"apple", "banana", "orange", "grape"}));
+        this.categories.add(new Category("colors", new String[]{"red", "blue", "green", "yellow"}));
+        this.categories.add(new Category("countries", new String[]{"usa", "canada", "mexico", "brazil"}));
+        this.categories.add(new Category("cities", new String[]{"new-york", "los-angeles", "chicago", "miami"}));       
+        this.categories.add(new Category("cars", new String[]{"toyota", "honda", "ford", "chevy"}));
+        this.categories.add(new Category("movies", new String[]{"titanic", "avatar", "inception", "joker"}));
+        this.categories.add(new Category("sports", new String[]{"soccer", "basketball", "football", "baseball"}));
+        this.categories.add(new Category("food", new String[]{"pizza", "burger", "pasta", "salad"}));
+        this.categories.add(new Category("music", new String[]{"pop", "rock", "rap", "jazz"}));
+        this.categories.add(new Category("books", new String[]{"harry-potter", "lord-of-the-rings", "game-of-thrones", "the-hobbit"}));
+        this.categories.add(new Category("games", new String[]{"minecraft", "fortnite", "roblox", "among us"}));
+        this.categories.add(new Category("clothes", new String[]{"shirt", "pants", "shoes", "hat"}));
+        this.categories.add(new Category("weather", new String[]{"sunny", "rainy", "cloudy", "snowy"}));
+        this.categories.add(new Category("seasons", new String[]{"summer", "fall", "winter", "spring"}));
+
     }
 
     public void makeTable() {
         ArrayList<Category> selectedCategories = new ArrayList<>();
         while (selectedCategories.size() < 4) {
-            Category randomCategory = categories[(int) (Math.random() * categories.length)];
+            Category randomCategory = categories.get((int) (Math.random() * categories.size()));
             if (!selectedCategories.contains(randomCategory)) {
                 selectedCategories.add(randomCategory);
             }
         }
-        this.table = selectedCategories.toArray(new Category[0]);
+        this.table = selectedCategories;
 
     }
 
@@ -58,8 +56,8 @@ class GameHandler {
         Collections.shuffle(allValues);
 
         // Print the shuffled values in the table format
-        int numRows = table[0].values.length;
-        for (int i = 0; i < numRows; i++) {
+        int numRows = table.get(0).values.length;
+        for (int i = 0; i < 4; i++) {
             for (Category category : table) {
                 System.out.printf("%-" + (calculateMaxWidth(table) + 2) + "s", allValues.remove(0));
             }
@@ -68,7 +66,7 @@ class GameHandler {
     }
 
 // Helper method to calculate the maximum width of all values in the table
-    private int calculateMaxWidth(Category[] table) {
+    private int calculateMaxWidth(ArrayList<Category> table) {
         int maxWidth = 0;
         for (Category category : table) {
             for (String value : category.values) {
@@ -80,16 +78,18 @@ class GameHandler {
 
     public String check(String[] guessArray) {
         int correct = 0;
-        for (int j = 0; j < table.length; j++) {
+        for (int j = 0; j < table.size(); j++) {
             for (int k = 0; k < guessArray.length; k++) {
-                for (int i = 0; i < table[j].values.length; i++) {
-                    if (guessArray[k].equals(table[j].values[i])) {
+                for (int i = 0; i < table.get(j).values.length; i++) {
+                    if (guessArray[k].equals(table.get(j).values[i])) {
                         correct++; 
                     }
                 }
             }
             if (correct == 4) {
-                return "You guessed the " + table[j].category + " category correctly";
+                String word = "You guessed the " + table.get(j).category + " category correctly";
+                table.remove(j);
+                return word;
                 
             }
             correct = 0;
